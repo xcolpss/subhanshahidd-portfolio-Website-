@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= Theme ================= */
+:root{
+  --bg:#0a0e1a;
+  --bg-soft:#0d1222;
+  --ink:#e7e9ee;
+  --ink-muted:#9aa3b2;
+  --brand:#ffc800;
+  --brand-2:#ffe179;
+  --accent:#ffc800;
+  --card:#0f1426;
+  --border:rgba(255,255,255,.08);
+}
+html{ scroll-behavior:smooth; }
+body{
+  background:
+    radial-gradient(1200px 800px at 20% -10%, rgba(255,200,0,.06), transparent),
+    radial-gradient(800px 600px at 90% 10%, rgba(255,200,0,.05), transparent),
+    var(--bg);
+  color:var(--ink);
+}
+::selection{ background:rgba(255,200,0,.25); color:#0a0e1a; }
+
+.text-ink{ color:var(--ink); }
+.text-ink-muted{ color:var(--ink-muted); }
+.text-accent{ color:var(--accent); }
+.border-border{ border-color:var(--border); }
+
+/* ================= Layout & Type ================= */
+.section{ padding:72px 0; position:relative; scroll-margin-top:84px; }
+@media (min-width:768px){ .section{ padding:96px 0; } }
+.section:not(:first-of-type)::before{
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:min(1200px,92vw); height:1px; border-radius:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+  pointer-events:none;
+}
+.container-rl{ width:100%; max-width:1200px; margin-inline:auto; padding-inline:1rem; }
+
+.h1{ font-weight:800; letter-spacing:-.02em; line-height:1.05; font-size:clamp(34px,6vw,64px); }
+.h2{ font-weight:700; letter-spacing:-.01em; line-height:1.15; font-size:clamp(22px,3.2vw,32px); }
+.kicker{ font-size:.8rem; text-transform:uppercase; letter-spacing:.18em; color:var(--ink-muted); }
+.p-muted{ color:var(--ink-muted); max-width:68ch; }
+
+/* ================= Buttons ================= */
+.btn{
+  @apply inline-flex items-center justify-center font-semibold rounded-xl;
+  padding:.65rem 1rem;
+  transition: transform .28s cubic-bezier(.22,1,.36,1), box-shadow .28s, background-color .28s;
+}
+.btn-primary{
+  background:linear-gradient(180deg,#ffd84d,#ffc800);
+  color:#16181d;
+  box-shadow:0 10px 30px rgba(255,200,0,.15), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 40px rgba(255,200,0,.25); }
+.btn-ghost{
+  background:rgba(255,255,255,.06);
+  color:var(--ink);
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{ background:rgba(255,255,255,.10); transform:translateY(-2px); }
+
+/* ================= Basic Cards ================= */
+.h-card{
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+  border:1px solid var(--border);
+  border-radius:1rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+/* ================= HERO (requested behavior) ================= */
+/* Outer board: slightly tilted by default. On hover → straight + aura shows. */
+.hero-board{
+  position:relative;
+  display:inline-block;
+  transform: rotate(-3.5deg);
+  transition: transform .45s cubic-bezier(.22,1,.36,1), filter .45s;
+  filter: drop-shadow(0 24px 60px rgba(0,0,0,.42));
+  perspective: 1000px;
+}
+/* Warm aura that follows cursor (off until hover). */
+.hero-board::after{
+  content:"";
+  position:absolute;
+  inset:-54px;
+  border-radius:24px;
+  pointer-events:none;
+  background:
+    radial-gradient(640px 440px at var(--ax,50%) var(--ay,55%),
+      rgba(255,200,0,.36),
+      rgba(255,200,0,.18) 35%,
+      transparent 62%);
+  filter: blur(28px) saturate(120%);
+  opacity:0;
+  transition:opacity .45s cubic-bezier(.22,1,.36,1);
+  z-index:-1;
+}
+.hero-board.is-hover{ transform: rotate(0deg); }
+.hero-board.is-hover::after{ opacity:1; }
+
+/* Inner frame: thin unlit edge by default; glows smoothly when hovering the board. */
+.hero-frame{
+  position:relative;
+  border-radius:16px;
+  padding:8px; /* thin frame edge */
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+  border:1px solid var(--border);
+  box-shadow:0 14px 42px rgba(0,0,0,.36);
+  transition: box-shadow .45s, border-color .45s, filter .45s;
+}
+.hero-frame::before{
+  content:"";
+  position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
+  opacity:0; transition:opacity .45s; mix-blend:overlay;
+}
+.hero-frame.is-hover{
+  border-color: rgba(255,200,0,.42);
+  box-shadow:
+    0 22px 64px rgba(0,0,0,.48),
+    inset 0 0 0 1px rgba(255,200,0,.10);
+  filter: saturate(105%);
+}
+.hero-frame.is-hover::before{ opacity:1; }
+
+/* Image depth (no cursor-tilt while hovered; it stays straight) */
+.hero-frame img{
+  border-radius:12px;
+  transform: translateZ(34px);
+  transition: transform .45s;
+}
+.hero-frame.is-hover img{ transform: translateZ(40px) scale(1.004); }
+
+/* ===== Other Utilities you already use ===== */
+.nav-underline{ position:relative; padding-bottom:2px; }
+.nav-underline::after{
+  content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
+  background:var(--accent); border-radius:2px;
+  box-shadow:0 0 12px rgba(255,200,0,.55);
+  transition:width .25s ease;
+}
+.nav-underline:hover::after,
+.nav-underline[data-active="true"]::after{ width:100%; }
+
+.nav-link{ position:relative; padding:8px 10px; color:var(--ink-muted); transition:color .18s ease; }
+.nav-link:hover{ color:var(--ink); }
+.nav-link::after{
+  content:""; position:absolute; left:8px; right:8px; bottom:-6px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform:scaleX(0); transform-origin:center; transition:transform .22s ease;
+}
+.nav-link:hover::after{ transform:scaleX(1); }
+.nav-link--active{ color:var(--ink); font-weight:600; }
+.nav-link--active::after{ transform:scaleX(1); }
+
+/* Minimal hairlines (used page-wide) */
+.hairline{
+  height:1px; border-radius:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+}
+.hairline-accent{
+  height:1px; border-radius:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,200,0,.28), transparent);
+}
+
+/* Anchors work below sticky navbar */
+:where(section[id]){ scroll-margin-top:92px; }
+.anchor{ scroll-margin-top:96px; }
+/* Hide horizontal scrollbar on the testimonials track */
+.no-scrollbar {
+  scrollbar-width: none;      /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar { /* Safari/Chrome */
+  display: none;
+}
+/* Tighter container padding on phones */
+.container-rl { padding-inline: 14px; }
+
+/* Slightly smaller base paddings on mobile */
+@media (max-width: 767px) {
+  .section { padding: 56px 0; }
+  .h1 { font-size: clamp(28px, 7vw, 44px); }
+  .h2 { font-size: clamp(20px, 5vw, 28px); }
+  .btn { padding: .6rem .9rem; }
+}
+
+/* Make hairline width align with container on mobile too */
+.section:not(:first-of-type)::before{
+  width: min(1200px, 92vw);
+}
+
+/* Showcase filters wrap nicely on phones */
+.filter-wrap { row-gap: 8px; }
+/* Hide horizontal scrollbar on mobile carousels */
+.no-scrollbar {
+  scrollbar-width: none;          /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Make snap rows feel great */
+.snap-x { scroll-snap-type: x mandatory; }
+.snap-start { scroll-snap-align: start; }
+
+
+
