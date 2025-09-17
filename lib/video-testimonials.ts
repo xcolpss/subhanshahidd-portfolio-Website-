@@ -56,4 +56,9 @@ export const VIDEO_TESTIMONIALS: TestimonialVideo[] = [
     role: 'Photoshop Artist',
     yt: 'https://youtube.com/shorts/y3klxSu5wRE?feature=share',
   },
+  {
+    who: 'Andreas',
+    role: 'Photoshop Artist and Video Editor',
+    yt: 'https://youtube.com/shorts/hENq6SrrOOk?feature=share',
+  },
 ];

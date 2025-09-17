@@ -69,7 +69,7 @@ export default function ContactSection() {
               href="mailto:rajasubhanahmed123456@gmail.com"
               className="inline-flex items-center gap-2 text-ink underline underline-offset-4 hover:text-accent"
             >
-              <Mail size={18} /> rajasubhanahmed123456@gmail.com
+              <Mail size={18} /> rajasubhanahmed@gmail.com
             </a>
             <div className="text-ink-muted flex items-center gap-2">
               <Phone size={18} /> WhatsApp: <a className="underline hover:text-accent" href="https://wa.me/923171511108" target="_blank" rel="noreferrer">+92 317 1511108</a>
