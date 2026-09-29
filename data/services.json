@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Branding Design",
+    "desc": "Logos, brand kits, and visual systems that scale across YouTube and socials.",
+    "index": "01"
+  },
+  {
+    "id": 2,
+    "title": "Poster Designs",
+    "desc": "Bold, cinematic posters and key art with retention-first framing.",
+    "index": "02"
+  },
+  {
+    "id": 3,
+    "title": "Video Editing",
+    "desc": "Fast-paced edits, retention maps, hooks, captions, and pacing built to convert.",
+    "index": "03"
+  },
+  {
+    "id": 4,
+    "title": "3D Modeling",
+    "desc": "Stylized assets for product shots and cinematic scenes in Blender/UE5.",
+    "index": "04"
+  },
+  {
+    "id": 5,
+    "title": "3D Animations",
+    "desc": "High-impact motion for ads, shorts, and storytelling with UE5/Blender.",
+    "index": "05"
+  }
+]

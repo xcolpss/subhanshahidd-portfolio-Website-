@@ -1,0 +1,31 @@
+{
+  "experience": [
+    {
+      "period": "2020 \u2013 2021",
+      "title": "Senior Graphic Designer",
+      "place": "Gethreen Rawalpindi"
+    },
+    {
+      "period": "2021 \u2013 2022",
+      "title": "UI Department Head",
+      "place": "Rubico/Rawalpindi"
+    },
+    {
+      "period": "2015 \u2013 Present",
+      "title": "Techno World / Rawalpindi",
+      "place": "Owner & Operations Manager"
+    }
+  ],
+  "education": [
+    {
+      "period": "2017 \u2013 2020",
+      "title": "O\u2011Levels",
+      "place": "Benchmark College"
+    },
+    {
+      "period": "2020 \u2013 2023",
+      "title": "A\u2011Levels",
+      "place": "Benchmark College"
+    }
+  ]
+}

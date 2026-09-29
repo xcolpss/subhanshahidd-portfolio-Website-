@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Photoshop",
+    "abbr": "Ps"
+  },
+  {
+    "name": "After Effects",
+    "abbr": "Ae"
+  },
+  {
+    "name": "DaVinci",
+    "abbr": "Dv"
+  },
+  {
+    "name": "Premiere Pro",
+    "abbr": "Pr"
+  },
+  {
+    "name": "Unreal Engine",
+    "abbr": "UE"
+  },
+  {
+    "name": "Blender",
+    "abbr": "Bl"
+  }
+]
