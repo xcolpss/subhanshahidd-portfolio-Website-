@@ -1,4 +1,5 @@
 ﻿import { supabase } from '@/lib/supabaseClient';
+import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 export const revalidate = 60;
@@ -10,16 +11,17 @@ export default async function ReviewsPage() {
     .order('created_at', { ascending: false });
 
   return (
-    <main className="min-h-screen bg-[#0e0e10] text-neutral-100 font-sans p-6 md:p-16 selection:bg-yellow-400 selection:text-neutral-950">
+    <main className="min-h-screen bg-[#0e0e10] text-neutral-100 font-sans selection:bg-yellow-400 selection:text-neutral-950 pt-28 pb-20 px-6">
+      <Navbar />
       <div className="max-w-6xl mx-auto">
-        <Link href="/" className="inline-flex items-center text-xs font-mono text-yellow-400 uppercase tracking-widest mb-10 hover:underline">
+        <Link href="/" className="inline-flex items-center text-xs font-mono text-yellow-400 uppercase tracking-widest mb-8 hover:underline">
           &larr; Back to Portfolio
         </Link>
 
         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight mb-4">
           ALL CLIENT <span className="text-yellow-400">REVIEWS.</span>
         </h1>
-        <p className="text-neutral-400 text-sm max-w-xl mb-16">
+        <p className="text-neutral-400 text-sm max-w-xl mb-14">
           Unfiltered feedback and verified endorsements from studios, founders, and directors.
         </p>
 
@@ -27,7 +29,7 @@ export default async function ReviewsPage() {
           {reviews?.map((review) => (
             <div
               key={review.id}
-              className="p-8 rounded-3xl bg-[#141416] border border-neutral-800 flex flex-col justify-between"
+              className="p-8 rounded-3xl bg-[#141416] border border-neutral-800 flex flex-col justify-between shadow-xl"
             >
               <div>
                 <div className="text-yellow-400 text-sm mb-4">{"★".repeat(review.rating || 5)}</div>

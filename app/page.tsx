@@ -1,11 +1,13 @@
 ﻿import { supabase } from '@/lib/supabaseClient';
+import Navbar from '@/components/Navbar';
 import ShowcaseView from '@/components/showcase/ShowcaseView';
 import ServicesSection from '@/components/sections/ServicesSection';
 import ExperienceSection from '@/components/sections/ExperienceSection';
 import SkillsGrid from '@/components/sections/SkillsGrid';
 import ChannelsSection from '@/components/sections/ChannelsSection';
 import ContactSection from '@/components/sections/ContactSection';
-import VideoCard from '@/components/ui/VideoCard';
+import ClientReviewsSection from '@/components/sections/ClientReviewsSection';
+import VideoTestimonialsSection from '@/components/sections/VideoTestimonialsSection';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -29,38 +31,12 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-[#0e0e10] text-neutral-100 font-sans selection:bg-yellow-400 selection:text-neutral-950 overflow-x-hidden">
       
-      {/* NAVBAR */}
-      <header className="fixed top-0 inset-x-0 z-50 border-b border-neutral-800/80 bg-[#0e0e10]/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Image src="/logo.png" alt="S2 Logo" width={32} height={32} className="object-contain" priority />
-            <span className="font-black text-lg sm:text-2xl tracking-tight text-white uppercase">
-              SUBHAN<span className="text-yellow-400">.</span>
-            </span>
-          </Link>
+      <Navbar />
 
-          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-widest font-bold text-neutral-400">
-            <a href="#services" className="hover:text-yellow-400 transition-colors">Services</a>
-            <a href="#showcase" className="hover:text-yellow-400 transition-colors">Showcase</a>
-            <a href="#experience" className="hover:text-yellow-400 transition-colors">Experience</a>
-            <a href="#testimonials" className="hover:text-yellow-400 transition-colors">Reviews</a>
-            <a href="#video-testimonials" className="hover:text-yellow-400 transition-colors">Testimonials</a>
-          </nav>
-
-          <a
-            href="#contact"
-            className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-black tracking-wider bg-yellow-400 text-neutral-950 hover:bg-yellow-300 transition-all shadow-lg shadow-yellow-400/20 uppercase"
-          >
-            Contact
-          </a>
-        </div>
-      </header>
-
-      {/* HERO SECTION - PERFECTLY SCALED FOR MOBILE */}
-      <section className="relative pt-24 sm:pt-32 pb-12 px-4 sm:px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      {/* HERO SECTION */}
+      <section className="relative pt-28 sm:pt-36 pb-12 px-4 sm:px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
-          {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider mb-4">
               <span className="w-2 h-2 rounded-full bg-yellow-400 animate-ping" />
@@ -74,12 +50,12 @@ export default async function HomePage() {
               </span>
             </h1>
 
-            <p className="mt-4 sm:mt-6 text-neutral-400 text-sm sm:text-base md:text-lg font-normal max-w-xl leading-relaxed">
+            <p className="mt-4 sm:mt-5 text-neutral-400 text-sm sm:text-base md:text-lg font-normal max-w-xl leading-relaxed">
               Crafting commercial-grade 3D art, Unreal Engine visual effects, and high-energy video productions that get brands noticed.
             </p>
 
-            {/* Mobile Hero Image Card (Visible on phones right under intro text) */}
-            <div className="my-6 block lg:hidden relative w-48 sm:w-56 aspect-[4/5] rounded-2xl overflow-hidden border-2 border-neutral-800 shadow-xl bg-neutral-900 mx-auto">
+            {/* Mobile Hero Image Card */}
+            <div className="my-5 block lg:hidden relative w-44 sm:w-52 aspect-[4/5] rounded-2xl overflow-hidden border-2 border-neutral-800 shadow-xl bg-neutral-900 mx-auto">
               <Image
                 src="/hero.jpg"
                 alt="Subhan Shahid"
@@ -88,13 +64,13 @@ export default async function HomePage() {
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60" />
-              <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800 text-left">
+              <div className="absolute bottom-3 left-3 right-3 p-2 rounded-xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800 text-left">
                 <div className="text-[9px] font-mono text-yellow-400 uppercase font-bold">Multimedia Artist</div>
                 <div className="text-white font-extrabold text-xs mt-0.5">Subhan Shahid</div>
               </div>
             </div>
 
-            <div className="mt-2 sm:mt-8 flex flex-wrap gap-3 justify-center lg:justify-start w-full sm:w-auto">
+            <div className="mt-2 sm:mt-6 flex flex-wrap gap-3 justify-center lg:justify-start w-full sm:w-auto">
               <a
                 href="#showcase"
                 className="px-7 py-3 rounded-xl bg-yellow-400 text-neutral-950 font-black text-xs sm:text-sm tracking-wider uppercase hover:bg-yellow-300 transition-all shadow-xl shadow-yellow-400/20 text-center"
@@ -109,8 +85,7 @@ export default async function HomePage() {
               </a>
             </div>
 
-            {/* Social Links */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs text-neutral-500 font-mono uppercase w-full justify-center lg:justify-start">
+            <div className="mt-6 flex flex-col sm:flex-row items-center gap-2 text-xs text-neutral-500 font-mono uppercase w-full justify-center lg:justify-start">
               <span>Find me on:</span>
               <div className="flex flex-wrap gap-3 text-neutral-300 font-bold text-xs justify-center">
                 <a href="https://www.upwork.com/freelancers/~01fc691ec1a320c941?mp_source=share" target="_blank" className="hover:text-yellow-400 transition-colors">
@@ -126,7 +101,6 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Right Desktop Image Column */}
           <div className="hidden lg:block lg:col-span-5 relative">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border-2 border-neutral-800 shadow-2xl bg-neutral-900 group">
               <Image
@@ -150,7 +124,7 @@ export default async function HomePage() {
 
       {/* STATS BAR */}
       <section className="border-y border-neutral-800/80 bg-[#121215]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats?.map((stat) => (
             <div key={stat.id} className="border-l-2 border-yellow-400 pl-4 sm:pl-6 text-left">
               <div className="text-2xl sm:text-4xl md:text-5xl font-black text-yellow-400 tracking-tight">{stat.value}</div>
@@ -178,85 +152,11 @@ export default async function HomePage() {
       <SkillsGrid />
 
       {/* CLIENT REVIEWS */}
-      <section id="testimonials" className="py-16 sm:py-24 bg-[#121215] border-t border-neutral-800/80 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3.5 py-1.5 rounded-full border border-yellow-400/20">
-              Endorsements
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mt-3">
-              CLIENT <span className="text-yellow-400">REVIEWS.</span>
-            </h2>
-          </div>
-          <Link
-            href="/reviews"
-            className="text-xs font-bold text-yellow-400 uppercase tracking-wider hover:underline"
-          >
-            Read All Reviews &rarr;
-          </Link>
-        </div>
-
-        <div className="relative w-full">
-          <div className="animate-marquee flex gap-4 sm:gap-6">
-            {[...(reviews || []), ...(reviews || [])].map((review, idx) => (
-              <div
-                key={idx}
-                className="w-[280px] sm:w-[360px] p-5 sm:p-6 rounded-2xl bg-[#17171a] border border-neutral-800 flex flex-col justify-between shrink-0"
-              >
-                <div>
-                  <div className="text-yellow-400 text-xs sm:text-sm mb-3">{"★".repeat(review.rating || 5)}</div>
-                  <p className="text-neutral-300 text-xs sm:text-sm leading-relaxed italic">"{review.review_text}"</p>
-                </div>
-                <div className="flex items-center gap-3 mt-5 pt-3 border-t border-neutral-800">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-400 text-neutral-950 font-black text-xs flex items-center justify-center">
-                    {review.client_name.slice(0, 2).toUpperCase()}
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-white">{review.client_name}</div>
-                    <div className="text-[10px] sm:text-xs text-neutral-500">{review.client_role} {review.company ? `• ${review.company}` : ''}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ClientReviewsSection reviews={reviews || []} />
 
       {/* VIDEO TESTIMONIALS */}
       {videoTestimonials && videoTestimonials.length > 0 && (
-        <section id="video-testimonials" className="py-16 sm:py-24 bg-[#0e0e10] border-t border-neutral-800/80 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3.5 py-1.5 rounded-full border border-yellow-400/20">
-                Verified Video Proof
-              </span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mt-3">
-                VIDEO <span className="text-yellow-400">TESTIMONIALS.</span>
-              </h2>
-            </div>
-            <Link
-              href="/video-testimonials"
-              className="text-xs font-bold text-yellow-400 uppercase tracking-wider hover:underline"
-            >
-              Watch All Video Reviews &rarr;
-            </Link>
-          </div>
-
-          <div className="relative w-full">
-            <div className="animate-marquee flex gap-4 sm:gap-6">
-              {[...(videoTestimonials || []), ...(videoTestimonials || [])].map((vt, idx) => (
-                <div key={idx} className="shrink-0 w-[210px] sm:w-[260px]">
-                  <VideoCard
-                    youtubeId={vt.youtube_id}
-                    title={vt.client_name}
-                    subtitle={vt.company}
-                    aspectRatio="9:16"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <VideoTestimonialsSection videoTestimonials={videoTestimonials} />
       )}
 
       {/* CONTACT */}

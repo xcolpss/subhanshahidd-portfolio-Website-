@@ -1,4 +1,5 @@
 ﻿import { supabase } from '@/lib/supabaseClient';
+import Navbar from '@/components/Navbar';
 import VideoCard from '@/components/ui/VideoCard';
 import Link from 'next/link';
 
@@ -11,16 +12,17 @@ export default async function AllVideoTestimonialsPage() {
     .order('created_at', { ascending: false });
 
   return (
-    <main className="min-h-screen bg-[#0e0e10] text-neutral-100 font-sans p-6 md:p-16 selection:bg-yellow-400 selection:text-neutral-950">
+    <main className="min-h-screen bg-[#0e0e10] text-neutral-100 font-sans selection:bg-yellow-400 selection:text-neutral-950 pt-28 pb-20 px-6">
+      <Navbar />
       <div className="max-w-6xl mx-auto">
-        <Link href="/" className="inline-flex items-center text-xs font-mono text-yellow-400 uppercase tracking-widest mb-10 hover:underline">
+        <Link href="/" className="inline-flex items-center text-xs font-mono text-yellow-400 uppercase tracking-widest mb-8 hover:underline">
           &larr; Back to Portfolio
         </Link>
 
         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight mb-4">
           ALL VIDEO <span className="text-yellow-400">TESTIMONIALS.</span>
         </h1>
-        <p className="text-neutral-400 text-sm max-w-xl mb-16">
+        <p className="text-neutral-400 text-sm max-w-xl mb-14">
           Watch verified short client reviews and production endorsements.
         </p>
 

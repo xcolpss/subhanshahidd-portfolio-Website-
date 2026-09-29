@@ -2,17 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+html {
+  scroll-behavior: smooth;
 }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 30s linear infinite;
+/* Hide scrollbars for clean carousel tracking */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-.animate-marquee:hover {
-  animation-play-state: paused;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
