@@ -1,7 +1,7 @@
-// app/layout.tsx
+﻿// app/layout.tsx
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import Navbar from '@/components/navbar';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
