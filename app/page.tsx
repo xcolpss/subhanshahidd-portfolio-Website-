@@ -56,45 +56,63 @@ export default async function HomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION - MOBILE OPTIMIZED */}
-      <section className="relative pt-28 sm:pt-36 pb-16 px-4 sm:px-6 max-w-7xl mx-auto text-center lg:text-left">
+      {/* HERO SECTION - PERFECTLY SCALED FOR MOBILE */}
+      <section className="relative pt-24 sm:pt-32 pb-12 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          <div className="lg:col-span-7 flex flex-col items-center lg:items-start">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider mb-5">
+          
+          {/* Left Text Column */}
+          <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider mb-4">
               <span className="w-2 h-2 rounded-full bg-yellow-400 animate-ping" />
               Available for Commissions & Remote Work
             </div>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white leading-[1.1] tracking-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-[1.1] tracking-tight">
               MULTIMEDIA ARTIST & <br />
-              <span className="text-yellow-400 underline decoration-neutral-800 decoration-wavy underline-offset-8">
+              <span className="text-yellow-400 underline decoration-neutral-800 decoration-wavy underline-offset-4 sm:underline-offset-8">
                 3D / VFX DIRECTOR
               </span>
             </h1>
 
-            <p className="mt-6 text-neutral-400 text-base sm:text-lg md:text-xl font-normal max-w-xl leading-relaxed">
+            <p className="mt-4 sm:mt-6 text-neutral-400 text-sm sm:text-base md:text-lg font-normal max-w-xl leading-relaxed">
               Crafting commercial-grade 3D art, Unreal Engine visual effects, and high-energy video productions that get brands noticed.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3.5 justify-center lg:justify-start w-full sm:w-auto">
+            {/* Mobile Hero Image Card (Visible on phones right under intro text) */}
+            <div className="my-6 block lg:hidden relative w-48 sm:w-56 aspect-[4/5] rounded-2xl overflow-hidden border-2 border-neutral-800 shadow-xl bg-neutral-900 mx-auto">
+              <Image
+                src="/hero.jpg"
+                alt="Subhan Shahid"
+                fill
+                priority
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60" />
+              <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800 text-left">
+                <div className="text-[9px] font-mono text-yellow-400 uppercase font-bold">Multimedia Artist</div>
+                <div className="text-white font-extrabold text-xs mt-0.5">Subhan Shahid</div>
+              </div>
+            </div>
+
+            <div className="mt-2 sm:mt-8 flex flex-wrap gap-3 justify-center lg:justify-start w-full sm:w-auto">
               <a
                 href="#showcase"
-                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-yellow-400 text-neutral-950 font-black text-xs sm:text-sm tracking-wider uppercase hover:bg-yellow-300 transition-all shadow-xl shadow-yellow-400/20 text-center"
+                className="px-7 py-3 rounded-xl bg-yellow-400 text-neutral-950 font-black text-xs sm:text-sm tracking-wider uppercase hover:bg-yellow-300 transition-all shadow-xl shadow-yellow-400/20 text-center"
               >
                 View Showcase
               </a>
               <a
                 href="#contact"
-                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900 border border-neutral-800 text-white font-bold text-xs sm:text-sm tracking-wider uppercase hover:border-yellow-400/60 hover:text-yellow-400 transition-all text-center"
+                className="px-7 py-3 rounded-xl bg-neutral-900 border border-neutral-800 text-white font-bold text-xs sm:text-sm tracking-wider uppercase hover:border-yellow-400/60 hover:text-yellow-400 transition-all text-center"
               >
                 Contact Me
               </a>
             </div>
 
-            {/* Social Links - Mobile Friendly */}
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-3 text-xs text-neutral-500 font-mono uppercase w-full justify-center lg:justify-start">
+            {/* Social Links */}
+            <div className="mt-8 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs text-neutral-500 font-mono uppercase w-full justify-center lg:justify-start">
               <span>Find me on:</span>
-              <div className="flex flex-wrap gap-4 text-neutral-300 font-bold text-xs sm:text-sm justify-center">
+              <div className="flex flex-wrap gap-3 text-neutral-300 font-bold text-xs justify-center">
                 <a href="https://www.upwork.com/freelancers/~01fc691ec1a320c941?mp_source=share" target="_blank" className="hover:text-yellow-400 transition-colors">
                   Upwork
                 </a>
@@ -108,7 +126,8 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative max-w-xs sm:max-w-sm mx-auto w-full">
+          {/* Right Desktop Image Column */}
+          <div className="hidden lg:block lg:col-span-5 relative">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border-2 border-neutral-800 shadow-2xl bg-neutral-900 group">
               <Image
                 src="/hero.jpg"
@@ -119,22 +138,23 @@ export default async function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60" />
               
-              <div className="absolute bottom-5 left-5 right-5 p-3.5 rounded-2xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800 text-left">
-                <div className="text-[10px] font-mono text-yellow-400 uppercase font-bold">Multimedia Artist</div>
-                <div className="text-white font-extrabold text-sm sm:text-base mt-0.5">Subhan Shahid</div>
+              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800">
+                <div className="text-xs font-mono text-yellow-400 uppercase font-bold">Multimedia Artist</div>
+                <div className="text-white font-extrabold text-base mt-0.5">Subhan Shahid</div>
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
       {/* STATS BAR */}
       <section className="border-y border-neutral-800/80 bg-[#121215]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats?.map((stat) => (
             <div key={stat.id} className="border-l-2 border-yellow-400 pl-4 sm:pl-6 text-left">
-              <div className="text-3xl sm:text-4xl md:text-5xl font-black text-yellow-400 tracking-tight">{stat.value}</div>
-              <div className="text-neutral-400 text-[10px] sm:text-xs font-bold tracking-widest uppercase mt-1">{stat.label}</div>
+              <div className="text-2xl sm:text-4xl md:text-5xl font-black text-yellow-400 tracking-tight">{stat.value}</div>
+              <div className="text-neutral-400 text-[10px] sm:text-xs font-bold tracking-widest uppercase mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -158,13 +178,13 @@ export default async function HomePage() {
       <SkillsGrid />
 
       {/* CLIENT REVIEWS */}
-      <section id="testimonials" className="py-20 sm:py-24 bg-[#121215] border-t border-neutral-800/80 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <section id="testimonials" className="py-16 sm:py-24 bg-[#121215] border-t border-neutral-800/80 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3.5 py-1.5 rounded-full border border-yellow-400/20">
               Endorsements
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mt-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mt-3">
               CLIENT <span className="text-yellow-400">REVIEWS.</span>
             </h2>
           </div>
@@ -177,18 +197,18 @@ export default async function HomePage() {
         </div>
 
         <div className="relative w-full">
-          <div className="animate-marquee flex gap-5">
+          <div className="animate-marquee flex gap-4 sm:gap-6">
             {[...(reviews || []), ...(reviews || [])].map((review, idx) => (
               <div
                 key={idx}
-                className="w-[300px] sm:w-[360px] p-6 rounded-2xl bg-[#17171a] border border-neutral-800 flex flex-col justify-between shrink-0"
+                className="w-[280px] sm:w-[360px] p-5 sm:p-6 rounded-2xl bg-[#17171a] border border-neutral-800 flex flex-col justify-between shrink-0"
               >
                 <div>
-                  <div className="text-yellow-400 text-sm mb-4">{"★".repeat(review.rating || 5)}</div>
+                  <div className="text-yellow-400 text-xs sm:text-sm mb-3">{"★".repeat(review.rating || 5)}</div>
                   <p className="text-neutral-300 text-xs sm:text-sm leading-relaxed italic">"{review.review_text}"</p>
                 </div>
-                <div className="flex items-center gap-3 mt-6 pt-4 border-t border-neutral-800">
-                  <div className="w-9 h-9 rounded-full bg-yellow-400 text-neutral-950 font-black text-xs flex items-center justify-center">
+                <div className="flex items-center gap-3 mt-5 pt-3 border-t border-neutral-800">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-400 text-neutral-950 font-black text-xs flex items-center justify-center">
                     {review.client_name.slice(0, 2).toUpperCase()}
                   </div>
                   <div>
@@ -204,13 +224,13 @@ export default async function HomePage() {
 
       {/* VIDEO TESTIMONIALS */}
       {videoTestimonials && videoTestimonials.length > 0 && (
-        <section id="video-testimonials" className="py-20 sm:py-24 bg-[#0e0e10] border-t border-neutral-800/80 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <section id="video-testimonials" className="py-16 sm:py-24 bg-[#0e0e10] border-t border-neutral-800/80 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3.5 py-1.5 rounded-full border border-yellow-400/20">
                 Verified Video Proof
               </span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mt-4">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mt-3">
                 VIDEO <span className="text-yellow-400">TESTIMONIALS.</span>
               </h2>
             </div>
@@ -223,9 +243,9 @@ export default async function HomePage() {
           </div>
 
           <div className="relative w-full">
-            <div className="animate-marquee flex gap-5">
+            <div className="animate-marquee flex gap-4 sm:gap-6">
               {[...(videoTestimonials || []), ...(videoTestimonials || [])].map((vt, idx) => (
-                <div key={idx} className="shrink-0 w-[220px] sm:w-[260px]">
+                <div key={idx} className="shrink-0 w-[210px] sm:w-[260px]">
                   <VideoCard
                     youtubeId={vt.youtube_id}
                     title={vt.client_name}
@@ -243,7 +263,7 @@ export default async function HomePage() {
       <ContactSection />
 
       {/* FOOTER */}
-      <footer className="border-t border-neutral-800/80 py-10 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 font-mono gap-4 text-center sm:text-left">
+      <footer className="border-t border-neutral-800/80 py-8 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 font-mono gap-4 text-center sm:text-left">
         <p>&copy; {new Date().getFullYear()} Subhan Shahid. All rights reserved.</p>
         <Link
           href="/admin"
