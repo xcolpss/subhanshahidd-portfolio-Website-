@@ -1,137 +1,320 @@
-﻿'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useState, useMemo, useEffect } from "react";
 
-interface ShowcaseItem {
+export interface ShowcaseItem {
   id: string;
   title: string;
   category: string;
-  thumbnail_url: string;
+  thumbnail_url?: string | null;
   youtube_id?: string | null;
   live_url?: string | null;
 }
 
-export default function ShowcaseSection({ items }: { items: ShowcaseItem[] }) {
-  const [filter, setFilter] = useState('ALL');
-  const [activeItem, setActiveItem] = useState<ShowcaseItem | null>(null);
+const CATEGORIES = [
+  { key: "all", label: "All" },
+  { key: "photo", label: "Photos" },
+  { key: "video", label: "Videos" },
+  { key: "3d", label: "3D / Unreal" },
+  { key: "reel", label: "Reels" },
+];
 
-  const categories = ['ALL', ...Array.from(new Set(items.map((i) => i.category.toUpperCase())))];
+export default function ShowcaseSection({
+  items = [],
+}: {
+  items?: ShowcaseItem[];
+}) {
+  const [active, setActive] = useState("all");
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [modalImg, setModalImg] = useState<string | null>(null);
 
-  const filtered = filter === 'ALL'
-    ? items
-    : items.filter((i) => i.category.toUpperCase() === filter);
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (["cat-photo", "cat-video", "cat-3d", "cat-reel"].includes(hash)) {
+        setActive(hash.replace("cat-", ""));
+      }
+    };
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
 
-  return (
-    <section id="showcase" className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-        <div>
-          <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/20">
-            Selected Portfolio
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white mt-4">
-            FEATURED <span className="text-yellow-400">WORKS.</span>
-          </h2>
-        </div>
+  const safeItems = Array.isArray(items) ? items : [];
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all duration-300 ${
-                filter === cat
-                  ? 'bg-yellow-400 text-neutral-950 shadow-lg shadow-yellow-400/20'
-                  : 'bg-neutral-900/80 text-neutral-400 hover:text-white border border-neutral-800'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
+  const groups = useMemo(() => {
+    return [
+      {
+        key: "photo",
+        label: "Photos",
+        items: safeItems.filter(
+          (i) => i?.category && i.category.toLowerCase().includes("photo"),
+        ),
+      },
+      {
+        key: "video",
+        label: "Videos",
+        items: safeItems.filter(
+          (i) =>
+            i?.category &&
+            (i.category.toLowerCase().includes("video") ||
+              i.category.toLowerCase().includes("edit")),
+        ),
+      },
+      {
+        key: "3d",
+        label: "3D / Unreal",
+        items: safeItems.filter(
+          (i) =>
+            i?.category &&
+            (i.category.toLowerCase().includes("3d") ||
+              i.category.toLowerCase().includes("unreal") ||
+              i.category.toLowerCase().includes("vfx")),
+        ),
+      },
+      {
+        key: "reel",
+        label: "Reels",
+        items: safeItems.filter(
+          (i) => i?.category && i.category.toLowerCase().includes("reel"),
+        ),
+      },
+    ].filter((g) => g.items.length > 0);
+  }, [safeItems]);
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((item, idx) => (
+  const filtered = useMemo(() => {
+    if (active === "all") return safeItems;
+    return safeItems.filter((i) => {
+      const c = (i?.category || "").toLowerCase();
+      if (active === "photo") return c.includes("photo");
+      if (active === "video") return c.includes("video") || c.includes("edit");
+      if (active === "3d")
+        return c.includes("3d") || c.includes("unreal") || c.includes("vfx");
+      if (active === "reel") return c.includes("reel");
+      return true;
+    });
+  }, [active, safeItems]);
+
+  const renderCard = (item: ShowcaseItem, isReel: boolean) => {
+    const isPlaying = playingId === item.id;
+    const thumb =
+      item.thumbnail_url ||
+      (item.youtube_id
+        ? `https://i.ytimg.com/vi/${item.youtube_id}/hqdefault.jpg`
+        : "/placeholder.jpg");
+
+    return (
+      <div
+        key={item.id}
+        className={`group relative rounded-2xl overflow-hidden bg-[#161619] border border-neutral-800/80 hover:border-yellow-400/80 transition-all duration-300 shadow-xl ${
+          isReel
+            ? "aspect-[9/16] w-full max-w-[210px] mx-auto"
+            : "aspect-video w-full"
+        }`}
+      >
+        {!isPlaying ? (
           <div
-            key={item.id || idx}
-            onClick={() => setActiveItem(item)}
-            className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/80 hover:border-yellow-400/60 transition-all duration-500 cursor-pointer shadow-xl hover:-translate-y-1"
+            className="relative w-full h-full cursor-pointer"
+            onClick={() => {
+              if (item.youtube_id) {
+                setPlayingId(item.id);
+              } else {
+                setModalImg(thumb);
+              }
+            }}
           >
-            <Image
-              src={item.thumbnail_url}
+            <img
+              src={thumb}
               alt={item.title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/15 transition-colors" />
 
-            {/* Hover Badge */}
-            <div className="absolute top-4 right-4">
-              <span className="text-[10px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md bg-neutral-950/80 border border-neutral-800 text-yellow-400 font-bold backdrop-blur-md">
+            {item.youtube_id && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-10 h-7 sm:w-12 sm:h-8 rounded-lg bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center text-white font-bold shadow-lg transition-transform group-hover:scale-110">
+                  <svg
+                    className="w-3.5 h-3.5 fill-current ml-0.5"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            )}
+
+            <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 bg-gradient-to-t from-black/95 via-black/50 to-transparent">
+              <h4 className="text-white font-bold text-xs sm:text-sm line-clamp-1 group-hover:text-yellow-400 transition-colors">
+                {item.title}
+              </h4>
+              <span className="text-[9px] sm:text-[10px] font-mono text-neutral-400 uppercase tracking-widest">
                 {item.category}
               </span>
             </div>
-
-            {/* Card Details */}
-            <div className="absolute bottom-0 inset-x-0 p-6 flex items-end justify-between">
-              <div>
-                <h3 className="font-bold text-lg text-white group-hover:text-yellow-400 transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-neutral-400 mt-1">Click to view full preview &rarr;</p>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-yellow-400 text-neutral-950 flex items-center justify-center font-bold text-sm transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                ↗
-              </div>
-            </div>
           </div>
+        ) : (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${item.youtube_id}?autoplay=1&rel=0`}
+            title={item.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full border-0"
+          />
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <section
+      id="showcase"
+      className="py-20 sm:py-24 px-4 sm:px-6 max-w-7xl mx-auto scroll-mt-20"
+    >
+      {/* INTRO REEL BANNER */}
+      <div className="mb-14 sm:mb-16 rounded-3xl overflow-hidden bg-[#161619] border border-neutral-800 p-3 sm:p-6 shadow-2xl">
+        <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/QLIgdqbA7rc?rel=0&modestbranding=1"
+            title="Intro Reel 2025"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full border-0"
+          />
+        </div>
+        <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              Intro Reel 2025
+            </h2>
+            <p className="text-xs text-neutral-400 font-mono mt-0.5">
+              Video Editing • VFX/CGI • 3D
+            </p>
+          </div>
+          <a
+            href="https://www.youtube.com/watch?v=QLIgdqbA7rc"
+            target="_blank"
+            rel="noreferrer"
+            className="px-5 py-2 rounded-full bg-neutral-900 border border-neutral-700 text-xs font-bold text-neutral-200 hover:border-yellow-400 hover:text-yellow-400 transition-all self-start sm:self-auto"
+          >
+            Watch on YouTube ↗
+          </a>
+        </div>
+      </div>
+
+      {/* FILTER BUTTONS */}
+      <div className="flex flex-wrap items-center gap-2 mb-12">
+        {CATEGORIES.map((f) => (
+          <button
+            key={f.key}
+            onClick={() => {
+              setActive(f.key);
+              setPlayingId(null);
+            }}
+            className={`px-4 sm:px-5 py-2 rounded-full text-xs font-black tracking-wider uppercase transition-all duration-300 ${
+              active === f.key
+                ? "bg-yellow-400 text-neutral-950 shadow-lg shadow-yellow-400/20"
+                : "bg-[#18181b] text-neutral-400 hover:text-white border border-neutral-800"
+            }`}
+          >
+            {f.label}
+          </button>
         ))}
       </div>
 
-      {/* Lightbox / Video Modal */}
-      {activeItem && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6"
-          onClick={() => setActiveItem(null)}
-        >
-          <div
-            className="relative w-full max-w-4xl bg-neutral-900 border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative aspect-video w-full bg-black">
-              {activeItem.youtube_id ? (
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeItem.youtube_id}?autoplay=1&rel=0`}
-                  title={activeItem.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full border-0"
-                />
-              ) : (
-                <Image
-                  src={activeItem.thumbnail_url}
-                  alt={activeItem.title}
-                  fill
-                  className="object-contain"
-                />
-              )}
+      {/* RENDER CATEGORIES */}
+      {active === "all" ? (
+        <div className="space-y-16">
+          {groups.length === 0 ? (
+            <div className="text-center py-12 border border-dashed border-neutral-800 rounded-3xl">
+              <p className="text-neutral-500 text-sm">No items found.</p>
             </div>
+          ) : (
+            groups.map((g) => {
+              const isReelGroup = g.key === "reel";
+              return (
+                <div key={g.key} id={`cat-${g.key}`} className="scroll-mt-28">
+                  <h3 className="text-xl sm:text-2xl font-black text-white mb-5 flex items-center gap-3">
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                    {g.label}
+                  </h3>
 
-            <div className="p-6 flex items-center justify-between bg-neutral-950 border-t border-neutral-800">
-              <div>
-                <span className="text-xs font-mono text-yellow-400 uppercase tracking-widest">{activeItem.category}</span>
-                <h3 className="text-xl font-bold text-white mt-0.5">{activeItem.title}</h3>
-              </div>
-              <button
-                onClick={() => setActiveItem(null)}
-                className="px-5 py-2.5 rounded-full bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold tracking-wider"
-              >
-                Close ✕
-              </button>
+                  {isReelGroup ? (
+                    <div className="overflow-x-auto pb-4 no-scrollbar -mx-4 px-4 flex gap-4 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 sm:overflow-visible">
+                      {g.items.map((item) => (
+                        <div
+                          key={item.id}
+                          className="shrink-0 w-[180px] sm:w-auto"
+                        >
+                          {renderCard(item, true)}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <>
+                      <div className="md:hidden -mx-4 px-4 snap-x snap-mandatory overflow-x-auto no-scrollbar space-x-4 flex pb-2">
+                        {g.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="snap-start shrink-0 w-[84vw] max-w-[380px]"
+                          >
+                            {renderCard(item, false)}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="hidden md:grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {g.items.map((item) => renderCard(item, false))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      ) : (
+        <div className="scroll-mt-28">
+          <h3 className="text-xl sm:text-2xl font-black text-white mb-6 flex items-center gap-3">
+            <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+            {CATEGORIES.find((c) => c.key === active)?.label}
+          </h3>
+
+          {filtered.length === 0 ? (
+            <div className="text-center py-12 border border-dashed border-neutral-800 rounded-3xl">
+              <p className="text-neutral-500 text-sm">
+                No items found in this category.
+              </p>
             </div>
+          ) : active === "reel" ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {filtered.map((item) => renderCard(item, true))}
+            </div>
+          ) : (
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((item) => renderCard(item, false))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* FULL-IMAGE MODAL */}
+      {modalImg && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          onClick={() => setModalImg(null)}
+        >
+          <div className="relative max-w-5xl max-h-[85vh] w-full h-full flex flex-col items-center justify-center">
+            <img
+              src={modalImg}
+              alt="Preview"
+              className="max-w-full max-h-[80vh] object-contain rounded-2xl"
+            />
+            <button
+              onClick={() => setModalImg(null)}
+              className="mt-4 px-6 py-2 rounded-full bg-neutral-900 border border-neutral-700 text-white text-xs font-bold hover:border-yellow-400"
+            >
+              Close ✕
+            </button>
           </div>
         </div>
       )}
