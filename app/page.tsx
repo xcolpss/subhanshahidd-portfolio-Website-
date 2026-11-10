@@ -1,42 +1,64 @@
-﻿import { supabase } from '@/lib/supabaseClient';
-import Navbar from '@/components/Navbar';
-import ShowcaseView from '@/components/showcase/ShowcaseView';
-import ServicesSection from '@/components/sections/ServicesSection';
-import ExperienceSection from '@/components/sections/ExperienceSection';
-import SkillsGrid from '@/components/sections/SkillsGrid';
-import ChannelsSection from '@/components/sections/ChannelsSection';
-import ContactSection from '@/components/sections/ContactSection';
-import ClientReviewsSection from '@/components/sections/ClientReviewsSection';
-import VideoTestimonialsSection from '@/components/sections/VideoTestimonialsSection';
-import Image from 'next/image';
-import Link from 'next/link';
+﻿import { supabase } from "@/lib/supabaseClient";
+import Navbar from "@/components/Navbar";
+import ShowcaseView from "@/components/showcase/ShowcaseView";
+import ServicesSection from "@/components/sections/ServicesSection";
+import ExperienceSection from "@/components/sections/ExperienceSection";
+import SkillsGrid from "@/components/sections/SkillsGrid";
+import ChannelsSection from "@/components/sections/ChannelsSection";
+import ContactSection from "@/components/sections/ContactSection";
+import TestimonialsSection from "@/components/sections/testimonials";
+import VideoTestimonialsSection from "@/components/sections/VideoTestimonialsSection";
+import Image from "next/image";
+import Link from "next/link";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
   const [
-    { data: stats },
-    { data: projects },
-    { data: reviews },
-    { data: videoTestimonials },
-    { data: channels },
+    statsResult,
+    projectsResult,
+    reviewsResult,
+    videoTestimonialsResult,
+    channelsResult,
   ] = await Promise.all([
-    supabase.from('stats').select('*').order('display_order', { ascending: true }),
-    supabase.from('showcase').select('*').order('display_order', { ascending: true }),
-    supabase.from('reviews').select('*').order('created_at', { ascending: false }),
-    supabase.from('video_testimonials').select('*').order('created_at', { ascending: false }),
-    supabase.from('clients_channels').select('*').order('display_order', { ascending: true }),
+    supabase.from("stats").select("*").order("display_order"),
+    supabase.from("showcase").select("*").order("display_order"),
+    supabase.from("reviews").select("*").order("created_at", {
+      ascending: false,
+    }),
+    supabase.from("video_testimonials").select("*").order("created_at", {
+      ascending: false,
+    }),
+    supabase.from("clients_channels").select("*").order("display_order"),
   ]);
+
+  for (const [name, result] of Object.entries({
+    stats: statsResult,
+    showcase: projectsResult,
+    reviews: reviewsResult,
+    video_testimonials: videoTestimonialsResult,
+    clients_channels: channelsResult,
+  })) {
+    if (result.error) {
+      console.error(`Supabase ${name} error:`, result.error.message);
+    } else {
+      console.log(`${name}: ${result.data?.length ?? 0} records`);
+    }
+  }
+
+  const stats = statsResult.data ?? [];
+  const projects = projectsResult.data ?? [];
+  const reviews = reviewsResult.data ?? [];
+  const videoTestimonials = videoTestimonialsResult.data ?? [];
+  const channels = channelsResult.data ?? [];
 
   return (
     <main className="min-h-screen bg-[#0e0e10] text-neutral-100 font-sans selection:bg-yellow-400 selection:text-neutral-950 overflow-x-hidden">
-      
       <Navbar />
 
       {/* HERO SECTION */}
       <section className="relative pt-28 sm:pt-36 pb-12 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider mb-4">
               <span className="w-2 h-2 rounded-full bg-yellow-400 animate-ping" />
@@ -51,7 +73,8 @@ export default async function HomePage() {
             </h1>
 
             <p className="mt-4 sm:mt-5 text-neutral-400 text-sm sm:text-base md:text-lg font-normal max-w-xl leading-relaxed">
-              Crafting commercial-grade 3D art, Unreal Engine visual effects, and high-energy video productions that get brands noticed.
+              Crafting commercial-grade 3D art, Unreal Engine visual effects,
+              and high-energy video productions that get brands noticed.
             </p>
 
             {/* Mobile Hero Image Card */}
@@ -65,8 +88,12 @@ export default async function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60" />
               <div className="absolute bottom-3 left-3 right-3 p-2 rounded-xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800 text-left">
-                <div className="text-[9px] font-mono text-yellow-400 uppercase font-bold">Multimedia Artist</div>
-                <div className="text-white font-extrabold text-xs mt-0.5">Subhan Shahid</div>
+                <div className="text-[9px] font-mono text-yellow-400 uppercase font-bold">
+                  Multimedia Artist
+                </div>
+                <div className="text-white font-extrabold text-xs mt-0.5">
+                  Subhan Shahid
+                </div>
               </div>
             </div>
 
@@ -88,13 +115,25 @@ export default async function HomePage() {
             <div className="mt-6 flex flex-col sm:flex-row items-center gap-2 text-xs text-neutral-500 font-mono uppercase w-full justify-center lg:justify-start">
               <span>Find me on:</span>
               <div className="flex flex-wrap gap-3 text-neutral-300 font-bold text-xs justify-center">
-                <a href="https://www.upwork.com/freelancers/~01fc691ec1a320c941?mp_source=share" target="_blank" className="hover:text-yellow-400 transition-colors">
+                <a
+                  href="https://www.upwork.com/freelancers/~01fc691ec1a320c941?mp_source=share"
+                  target="_blank"
+                  className="hover:text-yellow-400 transition-colors"
+                >
                   Upwork
                 </a>
-                <a href="https://instagram.com/subhann.shahid" target="_blank" className="hover:text-yellow-400 transition-colors">
+                <a
+                  href="https://instagram.com/subhann.shahid"
+                  target="_blank"
+                  className="hover:text-yellow-400 transition-colors"
+                >
                   Instagram
                 </a>
-                <a href="https://wa.me/923171511108" target="_blank" className="hover:text-yellow-400 transition-colors">
+                <a
+                  href="https://wa.me/923171511108"
+                  target="_blank"
+                  className="hover:text-yellow-400 transition-colors"
+                >
                   WhatsApp
                 </a>
               </div>
@@ -111,14 +150,17 @@ export default async function HomePage() {
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent opacity-60" />
-              
+
               <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#141416]/95 backdrop-blur-md border border-neutral-800">
-                <div className="text-xs font-mono text-yellow-400 uppercase font-bold">Multimedia Artist</div>
-                <div className="text-white font-extrabold text-base mt-0.5">Subhan Shahid</div>
+                <div className="text-xs font-mono text-yellow-400 uppercase font-bold">
+                  Multimedia Artist
+                </div>
+                <div className="text-white font-extrabold text-base mt-0.5">
+                  Subhan Shahid
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -126,9 +168,16 @@ export default async function HomePage() {
       <section className="border-y border-neutral-800/80 bg-[#121215]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats?.map((stat) => (
-            <div key={stat.id} className="border-l-2 border-yellow-400 pl-4 sm:pl-6 text-left">
-              <div className="text-2xl sm:text-4xl md:text-5xl font-black text-yellow-400 tracking-tight">{stat.value}</div>
-              <div className="text-neutral-400 text-[10px] sm:text-xs font-bold tracking-widest uppercase mt-0.5">{stat.label}</div>
+            <div
+              key={stat.id}
+              className="border-l-2 border-yellow-400 pl-4 sm:pl-6 text-left"
+            >
+              <div className="text-2xl sm:text-4xl md:text-5xl font-black text-yellow-400 tracking-tight">
+                {stat.value}
+              </div>
+              <div className="text-neutral-400 text-[10px] sm:text-xs font-bold tracking-widest uppercase mt-0.5">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
@@ -137,12 +186,13 @@ export default async function HomePage() {
       {/* SERVICES */}
       <ServicesSection />
 
-      {/* CHANNELS & CLIENTS */}
-      {channels && channels.length > 0 && (
-        <ChannelsSection channels={channels} />
-      )}
+      {/* SERVICES */}
+      {/* ServicesSection is already above this block */}
 
-      {/* SHOWCASE SECTION */}
+      {/* CHANNELS I'VE WORKED WITH */}
+      <ChannelsSection channels={channels || []} />
+
+      {/* SHOWCASE */}
       <ShowcaseView items={projects || []} />
 
       {/* EXPERIENCE & EDUCATION */}
@@ -152,19 +202,19 @@ export default async function HomePage() {
       <SkillsGrid />
 
       {/* CLIENT REVIEWS */}
-      <ClientReviewsSection reviews={reviews || []} />
+      <TestimonialsSection />
 
       {/* VIDEO TESTIMONIALS */}
-      {videoTestimonials && videoTestimonials.length > 0 && (
-        <VideoTestimonialsSection videoTestimonials={videoTestimonials} />
-      )}
+      <VideoTestimonialsSection videoTestimonials={videoTestimonials || []} />
 
       {/* CONTACT */}
       <ContactSection />
 
       {/* FOOTER */}
       <footer className="border-t border-neutral-800/80 py-8 px-4 sm:px-6 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 font-mono gap-4 text-center sm:text-left">
-        <p>&copy; {new Date().getFullYear()} Subhan Shahid. All rights reserved.</p>
+        <p>
+          &copy; {new Date().getFullYear()} Subhan Shahid. All rights reserved.
+        </p>
         <Link
           href="/admin"
           className="text-neutral-600 hover:text-yellow-400 transition-colors flex items-center gap-1.5"

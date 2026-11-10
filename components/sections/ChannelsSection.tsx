@@ -1,71 +1,78 @@
-﻿'use client';
+﻿"use client";
 
-interface ChannelItem {
+export interface ChannelItem {
   id: string;
   name: string;
   platform: string;
   url: string;
+  handle: string;
   avatar_url?: string | null;
 }
 
-export default function ChannelsSection({ channels }: { channels: ChannelItem[] }) {
+export default function ChannelsSection({
+  channels,
+}: {
+  channels: ChannelItem[];
+}) {
+  if (!channels?.length) return null;
+
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto border-t border-neutral-800/80">
-      <div className="mb-14">
-        <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3.5 py-1.5 rounded-full border border-yellow-400/30">
-          Trusted Creators & Brands
+    <section
+      id="channels"
+      className="py-20 px-4 sm:px-6 max-w-7xl mx-auto scroll-mt-20"
+    >
+      <div className="mb-12 text-center">
+        <span className="text-yellow-400 font-mono text-xs uppercase tracking-widest bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/20">
+          Collaborations & Brands
         </span>
-        <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mt-4">
-          CHANNELS & ACCOUNTS <span className="text-yellow-400">I'VE WORKED WITH.</span>
+
+        <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white mt-4">
+          CHANNELS & <span className="text-yellow-400">CLIENTS.</span>
         </h2>
-        <p className="text-neutral-400 text-sm mt-3">
-          Click any creator or brand card below to explore their official channels.
+
+        <p className="text-neutral-400 text-xs sm:text-sm mt-2 max-w-lg mx-auto">
+          Creators, businesses, and media channels I have produced visual
+          content, edits, and branding for.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-        {channels.map((ch) => {
-          const isYt = ch.platform.toLowerCase().includes('youtube');
-          return (
-            <a
-              key={ch.id}
-              href={ch.url}
-              target="_blank"
-              rel="noreferrer"
-              className="p-5 sm:p-6 rounded-3xl bg-[#141417] border border-neutral-800 hover:border-yellow-400/80 transition-all duration-300 group flex flex-col items-center text-center shadow-lg hover:-translate-y-1"
-            >
-              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mb-4 border-2 border-neutral-800 group-hover:border-yellow-400 transition-colors bg-neutral-900 flex items-center justify-center">
-                {ch.avatar_url ? (
-                  <img
-                    src={ch.avatar_url}
-                    alt={ch.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback avatar letter
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-                ) : null}
-                <span className="font-black text-lg text-yellow-400 select-none">
-                  {ch.name.slice(0, 2).toUpperCase()}
-                </span>
-              </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {channels.map((ch) => (
+          <a
+            key={ch.id}
+            href={ch.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group p-5 rounded-2xl bg-[#141417] border border-neutral-800/80 hover:border-yellow-400/60 transition-all duration-300 flex flex-col items-center text-center shadow-lg hover:-translate-y-1.5"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-[#1c1c20] border border-neutral-700/80 flex items-center justify-center font-black text-sm text-yellow-400 mb-3 group-hover:scale-105 group-hover:border-yellow-400 transition-all overflow-hidden shadow-inner">
+              {ch.avatar_url ? (
+                <img
+                  src={ch.avatar_url}
+                  alt={ch.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : ch.platform === "YouTube" ? (
+                <span className="text-red-500 text-base">▶</span>
+              ) : (
+                <span className="text-pink-500 text-base">◎</span>
+              )}
+            </div>
 
-              <span className={`text-[10px] font-mono uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full mb-2 ${
-                isYt ? 'bg-red-950/80 text-red-400 border border-red-800/40' : 'bg-pink-950/80 text-pink-400 border border-pink-800/40'
-              }`}>
-                {ch.platform}
-              </span>
+            <h4 className="font-bold text-xs sm:text-sm text-white group-hover:text-yellow-400 transition-colors line-clamp-1">
+              {ch.name}
+            </h4>
 
-              <h4 className="font-bold text-white text-sm sm:text-base group-hover:text-yellow-400 transition-colors line-clamp-1">
-                {ch.name}
-              </h4>
-              <span className="text-[11px] text-neutral-500 font-mono mt-1 group-hover:underline">
-                Visit Channel ↗
-              </span>
-            </a>
-          );
-        })}
+            <span className="text-[10px] font-mono text-neutral-400 mt-0.5 line-clamp-1">
+              {ch.handle}
+            </span>
+
+            <span className="text-[9px] font-mono uppercase tracking-wider text-yellow-400/90 mt-2 bg-neutral-900 px-2 py-0.5 rounded border border-neutral-800">
+              {ch.platform} ↗
+            </span>
+          </a>
+        ))}
       </div>
     </section>
   );

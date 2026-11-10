@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useEffect } from "react";
 
 export interface ShowcaseItem {
   id: string;
   title: string;
-  category: string;
+  category: "Photos" | "Videos" | "3D / Unreal" | "Reels" | string;
   thumbnail_url?: string | null;
   youtube_id?: string | null;
   live_url?: string | null;
@@ -42,42 +42,34 @@ export default function ShowcaseSection({
 
   const safeItems = Array.isArray(items) ? items : [];
 
+  // Match category filters strictly to prevent bleed between 3D and Photos
+  const isPhoto = (c: string) => c === "photos" || c === "photo";
+  const isVideo = (c: string) => c === "videos" || c === "video";
+  const is3D = (c: string) =>
+    c === "3d / unreal" || c === "3d" || c === "unreal";
+  const isReel = (c: string) => c === "reels" || c === "reel";
+
   const groups = useMemo(() => {
     return [
       {
         key: "photo",
         label: "Photos",
-        items: safeItems.filter(
-          (i) => i?.category && i.category.toLowerCase().includes("photo"),
-        ),
+        items: safeItems.filter((i) => isPhoto(i.category.toLowerCase())),
       },
       {
         key: "video",
         label: "Videos",
-        items: safeItems.filter(
-          (i) =>
-            i?.category &&
-            (i.category.toLowerCase().includes("video") ||
-              i.category.toLowerCase().includes("edit")),
-        ),
+        items: safeItems.filter((i) => isVideo(i.category.toLowerCase())),
       },
       {
         key: "3d",
         label: "3D / Unreal",
-        items: safeItems.filter(
-          (i) =>
-            i?.category &&
-            (i.category.toLowerCase().includes("3d") ||
-              i.category.toLowerCase().includes("unreal") ||
-              i.category.toLowerCase().includes("vfx")),
-        ),
+        items: safeItems.filter((i) => is3D(i.category.toLowerCase())),
       },
       {
         key: "reel",
         label: "Reels",
-        items: safeItems.filter(
-          (i) => i?.category && i.category.toLowerCase().includes("reel"),
-        ),
+        items: safeItems.filter((i) => isReel(i.category.toLowerCase())),
       },
     ].filter((g) => g.items.length > 0);
   }, [safeItems]);
@@ -86,28 +78,27 @@ export default function ShowcaseSection({
     if (active === "all") return safeItems;
     return safeItems.filter((i) => {
       const c = (i?.category || "").toLowerCase();
-      if (active === "photo") return c.includes("photo");
-      if (active === "video") return c.includes("video") || c.includes("edit");
-      if (active === "3d")
-        return c.includes("3d") || c.includes("unreal") || c.includes("vfx");
-      if (active === "reel") return c.includes("reel");
+      if (active === "photo") return isPhoto(c);
+      if (active === "video") return isVideo(c);
+      if (active === "3d") return is3D(c);
+      if (active === "reel") return isReel(c);
       return true;
     });
   }, [active, safeItems]);
 
-  const renderCard = (item: ShowcaseItem, isReel: boolean) => {
+  const renderCard = (item: ShowcaseItem, isReelCard: boolean) => {
     const isPlaying = playingId === item.id;
     const thumb =
       item.thumbnail_url ||
       (item.youtube_id
         ? `https://i.ytimg.com/vi/${item.youtube_id}/hqdefault.jpg`
-        : "/placeholder.jpg");
+        : "/photos/p01.jpg");
 
     return (
       <div
         key={item.id}
         className={`group relative rounded-2xl overflow-hidden bg-[#161619] border border-neutral-800/80 hover:border-yellow-400/80 transition-all duration-300 shadow-xl ${
-          isReel
+          isReelCard
             ? "aspect-[9/16] w-full max-w-[210px] mx-auto"
             : "aspect-video w-full"
         }`}
@@ -297,7 +288,7 @@ export default function ShowcaseSection({
         </div>
       )}
 
-      {/* FULL-IMAGE MODAL */}
+      {/* FULL-IMAGE MODAL FOR POSTERS */}
       {modalImg && (
         <div
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
@@ -307,7 +298,7 @@ export default function ShowcaseSection({
             <img
               src={modalImg}
               alt="Preview"
-              className="max-w-full max-h-[80vh] object-contain rounded-2xl"
+              className="max-w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl"
             />
             <button
               onClick={() => setModalImg(null)}
